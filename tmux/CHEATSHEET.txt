@@ -1,0 +1,61 @@
++==============================================================================+
+|                          T M U X   C H E A T   S H E E T                      |
+|                  prefix = Ctrl+a   (shown below as  ^a )                       |
+|             custom config: ~/.tmux.conf  ->  ~/projects/configuration/tmux     |
++==============================================================================+
+
+ LEGEND   ^a = press Ctrl+a (the prefix), release, THEN press the next key
+          M- = Alt (Meta)      S- = Shift      -r = repeatable (hold prefix once)
+          * = YOUR custom binding      (rest are tmux defaults)
+
++------------------------------------+-----------------------------------------+
+|  SESSIONS                          |  WINDOWS (tabs)                         |
++------------------------------------+-----------------------------------------+
+|  tmux new -s NAME    new session   |  ^a c      new window (cur path)      * |
+|  tmux ls             list sessions |  ^a ,      rename window               |
+|  tmux a -t NAME      attach        |  ^a 1..9   go to window N              |
+|  ^a d        detach (leave alive)  |  ^a n / p  next / prev window           |
+|  ^a s        switch session (list) |  S-Left  / S-Right  prev / next      * |
+|  ^a $        rename session        |  ^a w      window list (pick)           |
+|  ^a (  / )   prev / next session   |  ^a &      kill window (confirm)        |
+|                                    |  ^a < / >  move window left / right   * |
++------------------------------------+-----------------------------------------+
+|  PANES - SPLIT & KILL              |  PANES - MOVE FOCUS                      |
++------------------------------------+-----------------------------------------+
+|  ^a |    split vertical  (L | R)  *|  ^a h j k l   left/down/up/right (vim)* |
+|  ^a -    split horizontal (T / B) *|  M-Left/Down/Up/Right  focus, NO prefix* |
+|  ^a x    kill pane (confirm)       |  ^a o      cycle to next pane           |
+|  ^a z    zoom / unzoom pane        |  ^a ;      last (previous) pane         |
+|  ^a !    break pane into window    |  ^a q      show pane numbers            |
+|  ^a Space  cycle pane layouts      |  ^a q N    jump to pane number N        |
++------------------------------------+-----------------------------------------+
+|  PANES - RESIZE  (-r repeatable)   |  COPY MODE  (vi keys)                    |
++------------------------------------+-----------------------------------------+
+|  ^a H    grow left  5             *|  ^a [      enter copy/scroll mode       |
+|  ^a J    grow down  5             *|    v       start selection            * |
+|  ^a K    grow up    5             *|    y       copy -> system clipboard   * |
+|  ^a L    grow right 5             *|    q       quit copy mode               |
+|  (mouse-drag a border also works)  |    / ?     search fwd / back            |
+|  mouse: on (click/drag panes)      |    g / G   top / bottom                  |
+|                                    |  ^a ]      paste buffer                 |
++------------------------------------+-----------------------------------------+
+|  MISC                                                                        |
++------------------------------------------------------------------------------+
+|  ^a r      reload ~/.tmux.conf  ("Config reloaded!")                        * |
+|  ^a ?      list ALL key bindings (q to exit)                                  |
+|  ^a t      big clock                                                          |
+|  ^a :      command prompt (type a tmux command)                              |
+|  ^a I      install plugins (if using TPM)                                     |
++------------------------------------------------------------------------------+
+
+ QUICK FLOW
+   start work : tmux new -s dev        |  resume later : tmux a -t dev
+   split out  : ^a |   then  ^a -      |  jump panes  : M-arrows (no prefix)
+   zoom one   : ^a z   (toggle)        |  next tab    : S-Right
+   copy text  : ^a [  v (select) y     |  leave       : ^a d   (detached)
+
+ NOTES (your setup)
+   * Prefix is Ctrl+a, not the default Ctrl+b.   * Mouse is ON.
+   * Windows/panes are 1-indexed and auto-renumber when you close one.
+   * y in copy mode pipes to xclip -> system clipboard (X11).
++==============================================================================+
