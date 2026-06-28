@@ -1,0 +1,68 @@
++==============================================================================+
+|                           V I M   C H E A T   S H E E T                       |
+|        modes: NORMAL (Esc) . INSERT (i) . VISUAL (v) . COMMAND (:)            |
+|        leader = \  (default).  <C-x> = Ctrl+x.   Esc = back to NORMAL         |
++==============================================================================+
+
++------------------------------------+-----------------------------------------+
+|  MODES / ENTER INSERT              |  SAVE & QUIT  (NORMAL -> type :)        |
++------------------------------------+-----------------------------------------+
+|  i / a     insert before / after   |  :w        save                         |
+|  I / A     insert line start / end |  :wq  ZZ   save & quit                  |
+|  o / O     open line below / above |  :q        quit                         |
+|  v / V     visual char / line      |  :q!  ZQ   quit, discard changes        |
+|  <C-v>     visual BLOCK (column)   |  :wa / :qa save / quit ALL windows      |
+|  Esc       back to NORMAL          |  :w name   save as name                 |
++------------------------------------+-----------------------------------------+
+|  MOVE - SMALL                      |  MOVE - BIG / JUMP                       |
++------------------------------------+-----------------------------------------+
+|  h j k l   left down up right       |  gg / G    top / bottom of file         |
+|  w / b     next / prev word start   |  42G  :42  go to line 42                |
+|  e / ge    word end fwd / back      |  0 / ^ / $ line start / 1st char / end  |
+|  W B E     WORD (whitespace-sep)    |  { / }     prev / next paragraph        |
+|  f x / t x to / before next x       |  H M L     screen top / mid / bottom    |
+|  ; / ,     repeat f/t  fwd / back   |  <C-d>/<C-u> half page down / up        |
+|  % match bracket ( [ { pair         |  <C-o>/<C-i> jump back / forward (hist) |
++------------------------------------+-----------------------------------------+
+|  EDIT  (operator + motion)         |  COPY / PASTE / UNDO                     |
++------------------------------------+-----------------------------------------+
+|  x / X     del char under / before  |  yy / Y    yank (copy) line             |
+|  dd / D    del line / to line end   |  yw  y$    yank word / to end           |
+|  cc / C    change line / to end     |  p / P     paste after / before         |
+|  dw  d$    del word / to line end    |  "+y  "+p  yank/paste SYSTEM clipboard  |
+|  ciw / diw change / del inner word   |  u         undo                         |
+|  ci" ci( ci{ change inside quote/() |  <C-r>     redo                         |
+|  r x  / R  replace char / overwrite |  .         repeat last change           |
+|  >> / <<   indent / outdent line     |  J         join line below              |
+|  ~  gu  gU toggle/low/up case        |  3dd  2yy  count + op (3 lines, etc.)   |
++------------------------------------+-----------------------------------------+
+|  SEARCH & REPLACE                  |  VISUAL MODE (select, then op)          |
++------------------------------------+-----------------------------------------+
+|  /text     search forward           |  v  V  <C-v>  char / line / block       |
+|  ?text     search backward          |  o         jump to other end of sel     |
+|  n / N     next / prev match         |  d y c     delete / yank / change sel   |
+|  * / #     search word under cursor  |  > <       indent / outdent sel         |
+|  :%s/a/b/g  replace all in file      |  =         auto-indent sel              |
+|  :%s/a/b/gc  ... with confirm        |  gv        reselect last selection      |
+|  :noh      clear search highlight    |  <C-v> I txt Esc  block-insert column   |
++------------------------------------+-----------------------------------------+
+|  WINDOWS / SPLITS                   |  BUFFERS / TABS / FILES                 |
++------------------------------------+-----------------------------------------+
+|  :sp / :vsp  split horiz / vert      |  :e file   open / edit file             |
+|  <C-w> s / v same                    |  :ls       list buffers                 |
+|  <C-w> h j k l  move between splits  |  :bn / :bp next / prev buffer           |
+|  <C-w> q    close split              |  :bd       close buffer                 |
+|  <C-w> = / _ / |  equalize / max     |  :tabnew   new tab                      |
+|  <C-w> > <  resize width             |  gt / gT   next / prev tab              |
++------------------------------------+-----------------------------------------+
+
+ MARKS, MACROS, MISC
+   ma  `a       set mark a / jump to mark a        |  qa ... q   record macro to reg a
+   `` / ''      jump to last position              |  @a / @@    play macro a / replay
+   :g/pat/d     delete all lines matching pat      |  :r file    insert file contents
+   <C-a>/<C-x>  increment / decrement number       |  ga         show char code under cursor
+
+ SURVIVAL FLOW
+   stuck?  press Esc, Esc.   quit no-save: Esc :q!   |   help: :help word   exit help: :q
+   undo everything: u u u ...   |   ":w !sudo tee %" save as root   |   line nums: :set nu
++==============================================================================+
