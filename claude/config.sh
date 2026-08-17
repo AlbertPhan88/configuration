@@ -25,6 +25,21 @@ fi
 sed "s|\$HOME|$HOME|g" "$SCRIPT_DIR/settings.json" > "$SETTINGS"
 echo "Wrote $SETTINGS"
 
+# skills — symlinked per-skill so live state files (LOG.md, PROPOSALS.md)
+# written during sessions land in this repo and stay version-controlled.
+mkdir -p "$CLAUDE_DIR/skills"
+for skill_dir in "$SCRIPT_DIR"/skills/*/; do
+    [ -d "$skill_dir" ] || continue
+    name="$(basename "$skill_dir")"
+    target="$CLAUDE_DIR/skills/$name"
+    if [ -e "$target" ] && [ ! -L "$target" ]; then
+        echo "Warning: $target exists and is not a symlink, skipping"
+        continue
+    fi
+    ln -sfn "${skill_dir%/}" "$target"
+done
+echo "Symlinked skills -> $CLAUDE_DIR/skills"
+
 # teleclaude hooks — symlinked from the teleclaude repo so the scripts stay
 # version-controlled in one place rather than forked into this repo.
 if [ -d "$TELECLAUDE_DIR/scripts" ]; then
