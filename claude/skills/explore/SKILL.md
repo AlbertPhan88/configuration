@@ -3,38 +3,44 @@ name: explore
 description: Guided exploration of a new technical topic via strict L0–L3 layering — one-paragraph gist, component map, then per-branch descent on request only. Each step ends with a menu of candidate questions. Ends with a scored recall recap and a persistent mental-model doc. Use when the user invokes /explore <topic>, or says they want to "learn", "explore", or "understand" a new tool, system, concept, or codebase.
 ---
 
-# Explore — layered topic exploration (v0.8)
+# Explore — layered topic exploration (v0.11)
 
-Guide the user through a new technical topic. Primary enemy: **overwhelm at the start**. Never dump breadth and depth at once. The per-step budget (below) is the anti-overwhelm guarantee — it never grows, no matter how much you could anticipate.
+Guide the user through a new technical topic. Primary enemy: **overwhelm at the start**. Never dump breadth and depth at once — the budget rule in §1 enforces this.
 
-## 0. Setup (one exchange)
+**Output grammar is /brief — mandatory.** Every chat response in an explore session follows the `brief` skill's dense-notation grammar (load `~/.claude/skills/brief/SKILL.md` at session start if not already active): BLUF, epistemic tags, notation over connective prose, prose cap. Exception per the user's own scope rule: the saved mental-model doc is a document, not chat — write it in normal compact markdown.
 
-Ask only two things, in one message:
-1. **Goal** — why this topic? (evaluate it / use it / operate it / pure understanding). Every later descent is judged against this.
-2. **Prior anchors** — 1–2 things they already know that are adjacent (used for comparisons).
+**Layering limits DETAIL, never conclusions.** This is top-down (pyramid) exploration, not discovery learning: L0 opens with the answer — and when the goal is a decision, with the recommendation itself. Never withhold a conclusion to "preserve the exploration"; what stays withheld until asked is L2/L3 mechanism detail.
 
-If a previous exploration doc exists in `~/notes/explorations/`, run a 2-minute **warm-up recall** on the most recent topic first:
+## 0. Setup
+
+Order: warm-up (if due) → goal questions → contract → L0.
+
+**Warm-up** — runs first, before anything else, whenever a previous exploration doc exists in `~/notes/explorations/`. Takes ~2 minutes, on the most recent topic:
 1. Ask the user to reproduce its L1 map from memory, score it (`recall: X/Y nodes`), append the score to that topic's doc.
 2. **Parked-term sweep**: quiz each still-PARKED term from that doc ("define <term> in one line"). Pass → status RESOLVED(warm-up <date>); fail → stays PARKED and becomes a first-choice descent candidate for this session's menu.
 
-Then state the layer contract: "I'll give L0, then an L1 map. You pick which branch to descend. Nothing expands until you ask."
+**Goal questions** — ask only two things, in one message:
+1. **Goal** — why this topic? (evaluate it / use it / operate it / pure understanding). Every later descent is judged against this.
+2. **Prior anchors** — 1–2 things they already know that are adjacent (used for comparisons).
+
+**Contract** — state it before L0: "I'll give L0, then an L1 map. You pick which branch to descend. Conclusions always come first; detail expands only when you ask."
 
 ## 1. Layer rules
 
-| Layer | Content | Hard limits |
+| Layer | Content | Layer-specific limits |
 |---|---|---|
-| L0 | One-paragraph gist: what it is, what problem it kills, one anchor comparison | ≤5 sentences, **≤7 new terms total**, each new term bolded on first use |
-| L1 | Component map as an ASCII diagram + one line per component | One screen. No mechanism explanations yet. |
-| L2 | Mechanisms of ONE branch the user picked | Other branches stay collapsed. ≤7 new terms again. |
-| L3 | Internals/edge cases of one L2 element | Only on explicit request. Warn if it doesn't serve the stated goal. |
+| L0 | One-paragraph gist: what it is, what problem it kills, one anchor comparison | ≤5 sentences |
+| L1 | Component map as an ASCII diagram + one line per component | No mechanism explanations yet |
+| L2 | Mechanisms of ONE branch the user picked | Other branches stay collapsed |
+| L3 | Internals/edge cases of one L2 element | Only on explicit request |
 
 Rules that apply at every layer:
-- **Budget is hard**: max 7 new terms and one screen per layer-step, regardless of anticipation. If the honest explanation needs more, split the step.
+- **Budget is hard** (the anti-overwhelm guarantee): max 7 new terms and one screen per layer-step. Bold each new term on first use. Anticipation, promotion, and learning never grow the budget — they only change what fills it. If the honest explanation needs more, split the step.
 - **Term-closed clarifications**: when the user asks what a term means, define it using ONLY already-introduced terms or plain language — a clarification must never import new unknown terms. If an honest definition needs deeper concepts, answer: "that lives at L2/L3 of <branch> — park it or descend?" Guide the user's side too: drill a term only if it blocks the current layer (load-bearing); never clarify a clarification — second unknown term ⇒ park both and return to track. Parked terms usually self-resolve on descent.
 - **Descent is user-driven**: never auto-descend.
-- **The menu**: end every layer-step with (a) the branch list and (b) 2–3 **candidate questions** the user might ask next. Anticipation improves menu *selection and ordering*, never step *volume* — a learned question becomes one menu line, its answer stays behind the user's pick.
-- **Menu learning / promotion ladder**: a question the user asked unprompted once → future menu candidate. A question class recurring across ≈every topic → answered unprompted inside the layer template — and something else gets demoted, because the budget stays constant.
-- **Goal guard**: if a requested descent doesn't serve the stated goal, say so in one line, offer to park it — but obey an override without argument.
+- **The menu**: end every layer-step with (a) the branch list and (b) 2–3 **candidate questions** the user might ask next — a learned question becomes one menu line, its answer stays behind the user's pick.
+- **Menu learning / promotion ladder**: a question the user asked unprompted once → future menu candidate. A question class recurring across ≈every topic → answered unprompted inside the layer template, demoting something else (per the budget rule).
+- **Goal guard**: if a requested layer or descent doesn't serve the stated goal, say so in one line, offer to park it — but obey an override without argument.
 - **Parking lot**: the user says "park <term>" (or the two-deep rule triggers it) → append it to the doc's parked table immediately, with context. **Resolve-on-descent**: when a later descent reaches a parked term, announce "resolves parked: <term>" and flip its status.
 - **Diagram delivery**: the user works in a plain terminal. Draw every diagram as ASCII/Unicode box-drawing in a plain code fence, ≤ ~80 columns. No mermaid fences in responses; mermaid is allowed only inside the saved doc.
 - Anchor to the user's stated prior knowledge when a comparison genuinely fits; skip forced analogies.
@@ -43,7 +49,7 @@ Rules that apply at every layer:
 
 When the user says they're done (or the session is clearly wrapping up):
 1. Ask them to **reconstruct the L1 map from memory** — component names + edges, rough text form is fine.
-2. Diff their reconstruction against the real map. Report: ✅ correct, ❌ missing, 🔀 wrong relationship.
+2. Diff their reconstruction against the real map. Report three groups, labeled in words: correct / missing / wrong-edge (never reuse epistemic tags as diff markers).
 3. **Store the score** in the doc header: `recap: X/Y nodes, Z edges wrong`. Scores are the outer loop's evidence — never skip storing them.
 4. Every ❌/🔀 becomes an entry in the doc's *Weak spots* section.
 
